@@ -1,0 +1,1 @@
+# SAC RUN\nStart slow. Run stronger.\n\nBeginner run/walk interval coach (12-week plan). Static PWA: enable GitHub Pages (Settings > Pages > main branch / root).\n

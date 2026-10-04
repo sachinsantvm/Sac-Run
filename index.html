@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>SAC RUN</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#080A0D"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="SAC RUN">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#080A0D;--s1:#11151A;--s2:#181D23;--ac:#C6FF3D;--tx:#F2F5F7;--mu:#7F8B96;--ln:rgba(255,255,255,.09);--walk:#5CC8FF;--rest:#B79CFF;--bad:#FF6B5E;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--tx);font-family:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+body{overflow:hidden}
+#app{height:100%;max-width:560px;margin:0 auto;display:flex;flex-direction:column;position:relative}
+main{flex:1;overflow-y:auto;padding:18px 18px 24px}
+.logo{font-weight:800;font-size:22px;letter-spacing:.04em}.logo b{color:var(--ac)}
+.lbl{font-size:13px;letter-spacing:.14em;color:var(--mu);text-transform:uppercase;font-weight:600}
+h1{font-size:30px;margin:2px 0 14px;font-weight:700}
+.card{background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid var(--ln);border-radius:22px;padding:18px;margin-bottom:14px;backdrop-filter:blur(12px)}
+.big{font-size:56px;font-weight:700;line-height:1}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:56px;width:100%;border:0;border-radius:18px;background:var(--ac);color:#000;font:700 20px inherit;font-family:inherit;letter-spacing:.08em;cursor:pointer;box-shadow:0 0 28px rgba(198,255,61,.25);transition:transform .12s}
+.btn:active{transform:scale(.97)}.btn.g{background:var(--s2);color:var(--tx);box-shadow:none;border:1px solid var(--ln)}
+.row{display:flex;gap:10px}.row>*{flex:1}
+nav{display:flex;border-top:1px solid var(--ln);background:rgba(8,10,13,.92)}
+nav button{flex:1;min-height:58px;background:none;border:0;color:var(--mu);font:600 13px inherit;font-family:inherit;letter-spacing:.1em;cursor:pointer}
+nav button.on{color:var(--ac);box-shadow:inset 0 2px 0 var(--ac)}
+.dots{display:flex;gap:14px;margin:10px 0}.dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--ln);display:grid;place-items:center;font-size:15px}.dot.f{background:var(--ac);color:#000;border-color:var(--ac)}
+.jr{display:flex;gap:8px;overflow-x:auto;padding:4px 0}.jr span{flex:none;padding:8px 14px;border-radius:14px;border:1px solid var(--ln);font-weight:600}.jr .d{color:var(--ac)}.jr .c{background:var(--ac);color:#000;border-color:var(--ac)}
+.day{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--ln);font-size:19px}.day.t{color:var(--ac);font-weight:700}
+.ov{position:fixed;inset:0;background:var(--bg);z-index:10;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 20px) 20px calc(env(safe-area-inset-bottom,0px) + 20px);max-width:560px;margin:0 auto}
+.ov.show{display:flex}
+.ringw{position:relative;width:min(78vw,52vh,360px);aspect-ratio:1;display:grid;place-items:center}
+.ringw svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.ringw .in{text-align:center}.ph{font-size:28px;font-weight:700;letter-spacing:.25em}.tm{font-size:clamp(64px,22vw,110px);font-weight:700;line-height:1}
+.glow{animation:br 3.2s ease-in-out infinite}@keyframes br{50%{filter:drop-shadow(0 0 14px currentColor)}}
+.flash{position:absolute;inset:0;display:none;place-items:center;text-align:center;background:rgba(8,10,13,.93);font-size:48px;font-weight:800;z-index:3;white-space:pre-line}.flash.show{display:grid}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:20;display:none;align-items:flex-end}.modal.show{display:flex}.modal .card{width:100%;max-width:560px;margin:0 auto;background:var(--s1);border-radius:26px 26px 0 0}
+input{width:100%;min-height:48px;border-radius:14px;border:1px solid var(--ln);background:var(--s2);color:var(--tx);font:600 20px inherit;font-family:inherit;padding:0 14px}
+.sw{display:flex;justify-content:space-between;align-items:center;min-height:52px;font-size:19px}.sw button{min-width:76px;min-height:44px;border-radius:22px;border:1px solid var(--ln);background:var(--s2);color:var(--mu);font:700 15px inherit;font-family:inherit}.sw button.on{background:var(--ac);color:#000}
+.empty{color:var(--mu);text-align:center;padding:30px 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(prefers-color-scheme:light){:root{}}
+</style></head><body><div id="app"><main id="v"></main>
+<nav id="nav"></nav>
+<div class="ov" id="ov"><div style="width:100%;display:flex;justify-content:space-between;align-items:center"><span class="logo">SAC <b>RUN</b></span><span class="lbl" id="wk"></span></div>
+<div class="ringw"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="none" stroke="#1d242b" stroke-width="4"/><circle id="rg" class="glow" cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="282.7" stroke-dashoffset="0"/></svg><div class="in" aria-live="off"><div class="ph" id="ph"></div><div class="tm" id="tm">00:00</div><div class="lbl" id="rd"></div></div></div>
+<div style="width:100%"><div class="card" style="padding:12px 16px;display:flex;justify-content:space-between"><span class="lbl">NEXT</span><b id="nx" style="font-size:20px"></b></div>
+<div class="row"><button class="btn g" id="bp" aria-label="Previous interval">‹ PREV</button><button class="btn" id="bz" style="flex:2">PAUSE</button><button class="btn g" id="bs" aria-label="Skip interval">SKIP ›</button></div>
+<button class="btn g" id="bf" style="margin-top:10px;min-height:48px;font-size:16px">END WORKOUT</button></div>
+<div class="flash" id="fl" role="status"></div></div>
+<div class="modal" id="md"><div class="card" id="mc"></div></div></div>
+<script>
+"use strict";
+const PLAN=[[1,6],[1.5,6],[2,6],[3,5],[4,5],[5,4],[6,4],[8,3],[10,3],[12,3],[15,2],[20,2]].map((p,i)=>({w:i+1,jog:p[0]*60,walk:120,rounds:p[1]}));
+const P=w=>w===0?{jog:0,walk:0,rounds:1}:PLAN[w-1];const WU=300,CD=300,PER=3,KEY="sacrun.v1";
+const DEF={week:1,done:0,hist:[],weights:[{d:Date.now(),kg:107},{d:Date.now(),kg:103.8}],target:95,set:{voice:true,vib:true,snd:true},cur:null};
+let S;try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){S=JSON.parse(JSON.stringify(DEF))}
+if(!(S.week>=1&&S.week<=12))S.week=1;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const $=id=>document.getElementById(id);
+const mmss=s=>{s=Math.max(0,Math.ceil(s));return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+/* ---------- Audio coach ---------- */
+let actx;
+function beep(f,d){if(!S.set.snd)return;try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;g.gain.value=.15;o.connect(g);g.connect(actx.destination);o.start();o.stop(actx.currentTime+d)}catch(e){}}
+function say(t){if(!S.set.voice)return;try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t))}catch(e){}}
+function vib(p){if(S.set.vib)try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+/* ---------- Workout engine (single source of truth) ---------- */
+function build(w){if(w===0)return[{t:"WALK",k:"walk",d:WM*60}];const p=P(w),a=[{t:"WARM-UP",k:"rest",d:WU}];for(let r=1;r<=p.rounds;r++){a.push({t:"JOG",k:"jog",d:p.jog,r});if(r<p.rounds)a.push({t:"WALK",k:"walk",d:p.walk,r})}a.push({t:"COOL-DOWN",k:"rest",d:CD});return a}
+const E={ph:[],i:0,el:0,last:0,run:false,tick:null,w:1,total:0,start:0,cnt:-1,
+ begin(w,resume){this.w=w;this.ph=build(w);this.i=0;this.el=0;this.start=Date.now();if(resume&&resume.w===w&&w>0){this.i=Math.min(resume.i,this.ph.length-1);this.el=Math.max(0,resume.el);this.start=resume.start}this.run=false;this.show();ui(true);this.resume()},
+ remaining(){return Math.max(0,this.ph[this.i].d-this.el)},
+ sync(){if(this.run){const n=Date.now();this.el+=Math.min(Math.max(0,n-this.last),2000)/1000;this.last=n}},
+ resume(){if(this.run)return;this.run=true;this.last=Date.now();clearInterval(this.tick);this.tick=setInterval(()=>this.step(),250);this.cue(true);this.paint()},
+ pause(){this.sync();this.run=false;clearInterval(this.tick);this.tick=null;this.persist();this.paint()},
+ step(){this.sync();let g=0;while(this.remaining()<=0&&g++<5){if(this.i>=this.ph.length-1){this.finish(true);return}this.go(this.i+1,true)}
+  const n=this.ph[this.i+1];const r=this.remaining();if(n&&n.k==="jog"&&r<=3.2&&r>0){const c=Math.ceil(r);if(c!==this.cnt){this.cnt=c;flash("GET READY\n"+c);beep(660,.1)}}else if(this.cnt!==-1&&r>3.2)this.cnt=-1;
+  if(Math.floor(this.el)!==this._s){this._s=Math.floor(this.el);this.persist()}this.paint()},
+ go(i,auto){this.i=Math.max(0,Math.min(i,this.ph.length-1));this.el=0;this.cnt=-1;this.cue(auto);this.persist()},
+ cue(a){const p=this.ph[this.i];let m;if(p.k==="jog"){m=(p.r===1&&this.i<2)?"Start jogging.":"Start jogging.";flash("START\nJOGGING")}else if(p.k==="walk"){m=this.ph[this.i-1]&&this.ph[this.i-1].k==="jog"?"Good job. Start walking.":"Start walking.";flash("NICE WORK\nTIME TO WALK")}else if(p.t==="COOL-DOWN"){m="Cool down. Walk it out.";flash("COOL DOWN")}else{m="Warm up with an easy walk.";}
+  if(p.k==="jog"&&p.r===P(this.w).rounds&&P(this.w).rounds>1)m="Final round. Start jogging.";
+  if(a!==undefined){say(m);vib(p.k==="jog"?[200,80,200]:[400]);beep(p.k==="jog"?880:520,.25)}},
+ skip(){this.sync();if(this.i>=this.ph.length-1)this.finish(true);else this.go(this.i+1,true)},
+ prev(){this.sync();this.go(this.el>3?this.i:this.i-1,true)},
+ finish(done){clearInterval(this.tick);this.tick=null;this.sync();this.run=false;const dur=Math.round((Date.now()-this.start)/1000);S.cur=null;save();ui(false);
+  if(done){say("Workout complete.");vib([300,100,300,100,300]);if(this.w===0){go("home")}else feel(dur)}else{go("home")}},
+ persist(){S.cur={w:this.w,i:this.i,el:this.el,start:this.start};save()},
+ show(){$("wk").textContent=this.w?"WEEK "+String(this.w).padStart(2,"0"):"WALK"},
+ paint(){const p=this.ph[this.i];if(!p)return;const r=this.remaining();const col=p.k==="jog"?"var(--ac)":p.k==="walk"?"var(--walk)":"var(--rest)";
+  $("ov").style.color=col;$("ph").textContent=p.t;$("tm").textContent=mmss(r);$("tm").style.color="var(--tx)";
+  $("rd").textContent=p.r?"ROUND "+String(p.r).padStart(2,"0")+" / "+String(P(this.w).rounds).padStart(2,"0"):"EASY PACE";
+  $("rg").style.strokeDashoffset=(282.7*(1-r/p.d)).toFixed(2);$("rg").setAttribute("class",reduce?"":"glow");
+  const n=this.ph[this.i+1];$("nx").textContent=n?n.t+" "+mmss(n.d):"FINISH";$("bz").textContent=this.run?"PAUSE":"RESUME"}};
+function ui(on){$("ov").classList.toggle("show",on);$("nav").style.display=on?"none":"flex"}
+let ft;function flash(t){const f=$("fl");f.textContent=t;f.classList.add("show");clearTimeout(ft);ft=setTimeout(()=>f.classList.remove("show"),1500)}
+$("bz").onclick=()=>E.run?E.pause():E.resume();$("bs").onclick=()=>E.skip();$("bp").onclick=()=>E.prev();
+$("bf").onclick=()=>{E.pause();modal(`<h1>End workout?</h1><p class="lbl">Progress so far is not counted</p><div class="row"><button class="btn g" onclick="closeM();E.resume()">KEEP GOING</button><button class="btn" onclick="closeM();E.finish(false)">END</button></div>`)};
+document.addEventListener("visibilitychange",()=>{if(E.run){E.sync();E.step()}});
+addEventListener("pagehide",()=>{if(E.ph.length&&S.cur){E.sync();E.persist()}});
+/* ---------- Modal / feel ---------- */
+function modal(h){$("mc").innerHTML=h;$("md").classList.add("show")}function closeM(){$("md").classList.remove("show")}
+function feel(dur){modal(`<h1>HOW DID IT FEEL?</h1><div style="display:grid;gap:8px">${[["😊","EASY"],["🙂","COMFORTABLE"],["😐","CHALLENGING"],["😓","VERY HARD"],["🤕","PAIN / DISCOMFORT"]].map((f,i)=>`<button class="btn g" style="justify-content:flex-start" onclick="rate(${i},${dur})">${f[0]} ${f[1]}</button>`).join("")}</div>`)}
+function rate(i,dur){const w=E.w;if(w===0){closeM();go("home");return}const p=P(w);S.hist.unshift({d:Date.now(),w,day:S.done+1,dur,jog:p.jog*p.rounds,feel:i});
+ if(i<=2){S.done++;if(S.done>=PER&&S.week<12){S.week++;S.done=0}else if(S.done>=PER){S.done=PER}save();closeM();go("home")}
+ else{save();modal(`<h1>${i===4?"LISTEN TO YOUR BODY":"THAT'S OKAY"}</h1><p class="lbl" style="margin-bottom:14px">${i===4?"Rest and see a professional if pain continues.":"Repeating is part of the plan."}</p><div class="row"><button class="btn g" onclick="closeM();go('home')">REPEAT WORKOUT</button><button class="btn" onclick="S.done=0;save();closeM();go('home')">REPEAT WEEK</button></div>`)}}
+/* ---------- Views ---------- */
+let tab="home";
+const NAV=[["home","HOME"],["run","RUN"],["prog","PROGRESS"],["hist","HISTORY"],["me","PROFILE"]];
+function go(t){tab=t;$("nav").innerHTML=NAV.map(n=>`<button class="${n[0]===t?"on":""}" onclick="go('${n[0]}')" aria-label="${n[1]}">${n[1]}</button>`).join("");$("v").innerHTML=VIEWS[t]();$("v").scrollTop=0}
+const greet=()=>{const h=new Date().getHours();return h<12?"Good morning":h<18?"Good afternoon":"Good evening"};
+function today(){const p=PLAN[S.week-1];return `<div class="card"><div class="lbl">WEEK ${String(S.week).padStart(2,"0")} · DAY ${Math.min(S.done+1,PER)}</div><div class="lbl" style="margin-top:12px">TODAY'S RUN</div><div class="big" style="margin:6px 0 4px">${p.jog/60} <span style="font-size:24px">MIN JOG</span></div><div style="font-size:24px;color:var(--walk)">${p.walk/60} MIN WALK × ${p.rounds}</div><div class="lbl" style="margin:10px 0 14px">Warm-up 5 min → intervals → cool-down 5 min</div><button class="btn" onclick="startRun()">START RUN →</button></div>`}
+function startRun(){if(S.done>=PER&&S.week>=12){}E.begin(S.week);}
+const VIEWS={
+home(){const dots=[...Array(PER)].map((_,i)=>`<div class="dot ${i<S.done?"f":""}" aria-label="Run ${i+1} ${i<S.done?"complete":"pending"}">${i<S.done?"✓":""}</div>`).join("");
+ let rec=S.cur?`<div class="card" style="border-color:var(--ac)"><div class="lbl">UNFINISHED WORKOUT</div><div class="row" style="margin-top:10px"><button class="btn" onclick="E.begin(S.cur.w,S.cur)">RESUME WORKOUT</button><button class="btn g" onclick="S.cur=null;save();go('home')">DISCARD</button></div></div>`:"";
+ return `<div class="logo">SAC <b>RUN</b></div><h1>${greet()}, Sachin</h1>${rec}${today()}<div class="card"><div class="lbl">WEEKLY PROGRESS</div><div class="dots">${dots}</div><b>${S.done} / ${PER} COMPLETE</b></div><div class="jr">${PLAN.map(p=>`<span class="${p.w<S.week?"d":p.w===S.week?"c":""}">W${p.w}${p.w<S.week?" ✓":""}</span>`).join("")}</div>`},
+run(){return `<h1>RUN</h1>${today()}<div class="card"><div class="lbl">WALK MODE</div><div class="row" style="margin-top:10px">${[20,30,45,60].map(m=>`<button class="btn g" style="min-height:52px" onclick="walk(${m})">${m}</button>`).join("")}</div></div><div class="lbl" style="margin:16px 0 8px">12-WEEK PLAN</div>${PLAN.map(p=>`<div class="day ${p.w===S.week?"t":""}"><span>WEEK ${p.w}</span><span>${p.jog/60} / 2 min × ${p.rounds}</span></div>`).join("")}`},
+prog(){const n=S.hist.length,tot=S.hist.reduce((a,h)=>a+h.dur,0),lg=S.hist.reduce((a,h)=>Math.max(a,h.dur),0),w=S.weights,cur=w[w.length-1].kg,st=w[0].kg;
+ return `<h1>PROGRESS</h1><div class="card"><div class="lbl">WORKOUTS</div><div class="big">${n}</div><div class="row" style="margin-top:14px"><div><div class="lbl">TIME</div><b style="font-size:26px">${Math.floor(tot/3600)}H ${Math.floor(tot%3600/60)}M</b></div><div><div class="lbl">LONGEST</div><b style="font-size:26px">${mmss(lg)}</b></div></div></div>
+ <div class="card"><div class="lbl">WEIGHT JOURNEY</div><div class="row" style="margin:10px 0"><div><div class="lbl">START</div><b style="font-size:26px">${st} KG</b></div><div><div class="lbl">NOW</div><b style="font-size:26px;color:var(--ac)">${cur} KG</b></div><div><div class="lbl">TARGET</div><b style="font-size:26px">${S.target} KG</b></div></div>${chart(w.map(x=>x.kg))}<button class="btn g" style="margin-top:12px" onclick="addW()">+ ADD WEIGHT</button><p class="lbl">Aim for steady loss of about 0.5 kg per week.</p></div>
+ <div class="card"><div class="lbl">ACHIEVEMENTS</div><div class="jr" style="flex-wrap:wrap;margin-top:8px">${[["FIRST RUN",n>=1],["3 RUNS",n>=3],["10 RUNS",n>=10],["WEEK 4",S.week>=4],["WEEK 12",S.week>=12&&S.done>=PER]].map(a=>`<span class="${a[1]?"c":""}">${a[1]?"✓ ":"🔒 "}${a[0]}</span>`).join("")}</div></div>`},
+hist(){if(!S.hist.length)return `<h1>HISTORY</h1><div class="empty">No runs yet.<br>Finish your first workout to see it here.</div><button class="btn" onclick="go('run')">GO TO RUN</button>`;
+ return `<h1>HISTORY</h1>`+S.hist.map(h=>`<div class="card"><div class="lbl">${new Date(h.d).toLocaleDateString(undefined,{month:"short",day:"numeric"}).toUpperCase()} · WEEK ${h.w} · DAY ${h.day||"-"}</div><div class="big" style="font-size:44px">${mmss(h.dur)}</div><div class="lbl">${mmss(h.jog||0)} JOG · ${["EASY","COMFORTABLE","CHALLENGING","VERY HARD","PAIN"][h.feel]||""} · ✓ COMPLETE</div></div>`).join("")},
+me(){const sw=(k,l)=>`<div class="sw"><span>${l}</span><button class="${S.set[k]?"on":""}" onclick="S.set['${k}']=!S.set['${k}'];save();go('me')" aria-pressed="${S.set[k]}">${S.set[k]?"ON":"OFF"}</button></div>`;
+ return `<h1>PROFILE</h1><div class="card">${sw("voice","Voice coaching")}${sw("vib","Vibration")}${sw("snd","Sound")}</div><div class="card"><div class="lbl">PROGRAM WEEK</div><div class="row" style="margin-top:10px"><button class="btn g" onclick="S.week=Math.max(1,S.week-1);S.done=0;save();go('me')">−</button><b class="big" style="text-align:center;font-size:44px">${S.week}</b><button class="btn g" onclick="S.week=Math.min(12,S.week+1);S.done=0;save();go('me')">+</button></div></div><button class="btn g" onclick="resetAll()">RESET ALL DATA</button>`}};
+function chart(v){if(v.length<2)return `<div class="empty">Add a weight to see a trend.</div>`;const mn=Math.min(...v)-1,mx=Math.max(...v)+1,pts=v.map((y,i)=>`${(i/(v.length-1))*300},${80-((y-mn)/(mx-mn))*70}`).join(" ");return `<svg viewBox="0 0 300 90" width="100%" role="img" aria-label="Weight trend"><polyline points="${pts}" fill="none" stroke="#C6FF3D" stroke-width="3" stroke-linejoin="round"/></svg>`}
+function addW(){modal(`<h1>ADD WEIGHT</h1><input id="wi" type="number" inputmode="decimal" step="0.1" min="30" max="300" placeholder="kg" aria-label="Weight in kilograms"><p class="lbl" id="we"></p><div class="row" style="margin-top:12px"><button class="btn g" onclick="closeM()">CANCEL</button><button class="btn" onclick="saveW()">SAVE</button></div>`)}
+function saveW(){const v=parseFloat($("wi").value);if(!(v>=30&&v<=300)){$("we").textContent="Enter a weight between 30 and 300 kg.";return}S.weights.push({d:Date.now(),kg:Math.round(v*10)/10});save();closeM();go("prog")}
+function resetAll(){modal(`<h1>RESET EVERYTHING?</h1><div class="row"><button class="btn g" onclick="closeM()">CANCEL</button><button class="btn" onclick="try{localStorage.removeItem(KEY)}catch(e){}location.reload()">RESET</button></div>`)}
+function walk(m){modal(`<h1>${m} MIN WALK</h1><p class="lbl">Walk at a comfortable pace.</p><button class="btn" onclick="WM=${m};closeM();E.begin(0,null)">START</button>`);}
+window.WM=30;
+window.addEventListener("error",()=>{});
+go("home");
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script></body></html>
